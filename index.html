@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14122b">
+  <title>명장면 500피스 직소 퍼즐</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ===== 퍼즐 선택 화면 ===== -->
+  <section id="menuScreen" class="screen active" aria-labelledby="menuTitle">
+    <header class="menu-header">
+      <h1 id="menuTitle">🎬 명장면 500피스 직소 퍼즐</h1>
+      <p class="subtitle">감동적인 영화 명장면을 오마주한 그림 6장 중 하나를 골라 500조각을 맞춰 보세요.<br>제한 시간은 없어요. 500피스를 모두 맞추면 완성!</p>
+    </header>
+
+    <h2 class="level-title level-mid">난이도 중 <span>피스 방향 고정 · 흐린 밑그림 표시</span></h2>
+    <div class="card-grid" id="midGrid"></div>
+
+    <h2 class="level-title level-hard">난이도 상 <span>피스가 돌아가 있음 · 밑그림 없음</span></h2>
+    <div class="card-grid" id="hardGrid"></div>
+
+    <p class="footnote">※ 모든 그림은 영화 장면에서 영감을 받아 코드로 직접 그린 오리지널 일러스트입니다.</p>
+  </section>
+
+  <!-- ===== 게임 화면 ===== -->
+  <section id="gameScreen" class="screen" aria-label="퍼즐 게임">
+    <header class="game-header">
+      <button class="btn ghost small" id="btnMenu" aria-label="저장하고 메뉴로">◀ 메뉴</button>
+      <div class="game-title">
+        <strong id="gameName">-</strong>
+        <span id="gameLevel" class="badge">-</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn ghost small" id="btnPreview">🖼 원본</button>
+        <button class="btn danger small" id="btnGiveUp">포기</button>
+      </div>
+    </header>
+
+    <!-- 게임 상태: 색 + 문구 -->
+    <div id="statusBar" class="status-bar" data-state="start" role="status" aria-live="polite">
+      <div class="status-top">
+        <span id="statusText" class="status-text">🟦 시작! 첫 피스를 골라 보세요</span>
+        <span id="statusCount" class="status-count">0 / 500</span>
+      </div>
+      <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
+      <div class="status-meta">
+        <span>⏱ <b id="timeText">00:00</b></span>
+        <span>👆 시도 <b id="movesText">0</b></span>
+        <span>❌ 실수 <b id="mistakesText">0</b></span>
+        <span>💡 힌트 <b id="hintsText">0</b></span>
+      </div>
+    </div>
+    <div id="feedback" class="feedback" data-type="info" aria-live="assertive">아래 피스를 누른 뒤, 퍼즐판의 알맞은 자리를 누르세요.</div>
+
+    <main class="play-area">
+      <div class="board-panel">
+        <div class="zoom-bar">
+          <button class="btn icon" id="btnZoomOut" aria-label="축소">－</button>
+          <span id="zoomText">100%</span>
+          <button class="btn icon" id="btnZoomIn" aria-label="확대">＋</button>
+          <button class="btn ghost small" id="btnZoomFit">맞춤</button>
+        </div>
+        <div class="board-scroll" id="boardScroll">
+          <div class="board-inner" id="boardInner">
+            <canvas id="boardCanvas" width="2000" height="1600" aria-label="퍼즐판"></canvas>
+            <div id="hintBox" class="cell-box hint"></div>
+            <div id="flashBox" class="cell-box"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tray-panel">
+        <div class="tray-tools">
+          <div class="selected-wrap">
+            <div id="selectedPreview" class="selected-preview" aria-label="선택한 피스">선택<br>없음</div>
+          </div>
+          <div class="tool-buttons">
+            <button class="btn" id="btnRotate" aria-label="선택한 피스 회전">⟳ 회전</button>
+            <button class="btn" id="btnHint">💡 힌트</button>
+            <button class="btn ghost" id="btnShuffle">🔀 섞기</button>
+          </div>
+        </div>
+        <div class="filter-chips" role="tablist">
+          <button class="chip active" data-filter="all">전체 <b id="cntAll">500</b></button>
+          <button class="chip" data-filter="edge">가장자리 <b id="cntEdge">0</b></button>
+          <button class="chip" data-filter="inner">안쪽 <b id="cntInner">0</b></button>
+        </div>
+        <div class="tray" id="tray" aria-label="남은 피스"></div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== 로딩 ===== -->
+  <div id="loading" class="loading" hidden>
+    <div class="spinner"></div>
+    <p>500개 피스를 자르는 중…</p>
+  </div>
+
+  <!-- ===== 공용 모달 ===== -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle"></h2>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalActions" class="modal-actions"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
